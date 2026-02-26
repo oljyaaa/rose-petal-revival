@@ -1,26 +1,27 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 const services = [
   {
-    title: "Доглядові процедури",
-    description: "Професійний догляд за шкірою обличчя з використанням преміальної косметики",
+    title: "Ін'єкційна косметологія",
+    description: "Мезотерапія, біоревіталізація, ботулінотерапія та контурна пластика для молодості вашої шкіри",
     image: "/images/service-skincare.jpg",
   },
   {
-    title: "Масаж",
-    description: "Розслаблюючий та лікувальний масаж для відновлення вашого тіла та духу",
+    title: "Безін'єкційний догляд",
+    description: "Чистки, пілінги, маски та апаратні методики для здорової та сяючої шкіри обличчя",
     image: "/images/service-relax.jpg",
   },
   {
     title: "Елос-епіляція",
-    description: "Сучасна технологія видалення волосся — безболісно та ефективно",
+    description: "Сучасна технологія видалення волосся — безболісно, ефективно та надовго",
     image: "/images/service-epilation.jpg",
   },
   {
-    title: "Корегування фігури",
-    description: "Апаратні та ручні методики для ідеального силуету вашого тіла",
+    title: "Масаж",
+    description: "Класичний, лімфодренажний та антицелюлітний масаж для здоров'я та краси вашого тіла",
     image: "/images/service-nails.jpg",
   },
 ];
@@ -77,6 +78,20 @@ export default function ServicesSection() {
             <ServiceCard key={service.title} service={service} index={i} />
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mt-12"
+        >
+          <Link
+            to="/prices"
+            className="inline-block glass text-foreground px-8 py-3.5 rounded-2xl font-medium text-sm hover-lift"
+          >
+            Дивитися всі ціни →
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
