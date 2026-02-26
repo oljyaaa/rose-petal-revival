@@ -78,10 +78,10 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
                     className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body"
                   >
                     <option value="">Оберіть послугу</option>
-                    <option>Косметологія</option>
+                    <option>Ін'єкційна косметологія</option>
+                    <option>Безін'єкційний догляд</option>
                     <option>Масаж</option>
                     <option>Елос-епіляція</option>
-                    <option>Корегування фігури</option>
                   </select>
                 </div>
                 <div>

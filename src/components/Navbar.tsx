@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 const navLinks = [
-  { label: "Головна", href: "#hero" },
-  { label: "Послуги", href: "#services" },
-  { label: "Ціни", href: "#pricing" },
-  { label: "Відгуки", href: "#testimonials" },
-  { label: "Галерея", href: "#gallery" },
-  { label: "Контакти", href: "#footer" },
+  { label: "Головна", href: "/" },
+  { label: "Наші майстри", href: "/masters" },
+  { label: "Ціни та послуги", href: "/prices" },
+  { label: "Про нас", href: "/about" },
 ];
 
 export default function Navbar({ onBooking }: { onBooking: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
   const [dark, setDark] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("theme") === "dark";
@@ -32,11 +32,9 @@ export default function Navbar({ onBooking }: { onBooking: () => void }) {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
-  const scrollTo = (href: string) => {
+  useEffect(() => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, [location.pathname]);
 
   return (
     <motion.nav
@@ -48,21 +46,27 @@ export default function Navbar({ onBooking }: { onBooking: () => void }) {
       }`}
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
-        <a href="#hero" className="font-heading text-2xl font-bold text-foreground tracking-wide">
+        <Link to="/" className="font-heading text-2xl font-bold text-foreground tracking-wide">
           Beauty <span className="text-gradient">&</span> Room
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
-            <button
+            <Link
               key={link.href}
-              onClick={() => scrollTo(link.href)}
-              className="relative font-body text-sm font-medium text-foreground/80 hover:text-foreground transition-colors group"
+              to={link.href}
+              className={`relative font-body text-sm font-medium transition-colors group ${
+                location.pathname === link.href ? "text-foreground" : "text-foreground/70 hover:text-foreground"
+              }`}
             >
               {link.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-            </button>
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                  location.pathname === link.href ? "w-full" : "w-0 group-hover:w-full"
+                }`}
+              />
+            </Link>
           ))}
           <button
             onClick={() => setDark(!dark)}
@@ -110,13 +114,17 @@ export default function Navbar({ onBooking }: { onBooking: () => void }) {
           >
             <div className="flex flex-col p-4 gap-3">
               {navLinks.map((link) => (
-                <button
+                <Link
                   key={link.href}
-                  onClick={() => scrollTo(link.href)}
-                  className="text-left font-body text-foreground/80 hover:text-foreground py-2 px-3 rounded-xl hover:bg-accent/50 transition-colors"
+                  to={link.href}
+                  className={`text-left font-body py-2 px-3 rounded-xl transition-colors ${
+                    location.pathname === link.href
+                      ? "text-foreground bg-accent/50"
+                      : "text-foreground/80 hover:text-foreground hover:bg-accent/50"
+                  }`}
                 >
                   {link.label}
-                </button>
+                </Link>
               ))}
               <button
                 onClick={() => { setMobileOpen(false); onBooking(); }}

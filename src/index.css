@@ -6,43 +6,43 @@
 
 @layer base {
   :root {
-    --background: 340 30% 97%;
-    --foreground: 340 20% 15%;
+    --background: 20 25% 97%;
+    --foreground: 350 15% 18%;
 
-    --card: 340 40% 98%;
-    --card-foreground: 340 20% 15%;
+    --card: 15 30% 97%;
+    --card-foreground: 350 15% 18%;
 
-    --popover: 340 40% 98%;
-    --popover-foreground: 340 20% 15%;
+    --popover: 15 30% 97%;
+    --popover-foreground: 350 15% 18%;
 
-    --primary: 340 45% 65%;
+    --primary: 350 35% 62%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 340 30% 92%;
-    --secondary-foreground: 340 20% 25%;
+    --secondary: 20 25% 93%;
+    --secondary-foreground: 350 15% 28%;
 
-    --muted: 340 20% 94%;
-    --muted-foreground: 340 10% 50%;
+    --muted: 20 18% 94%;
+    --muted-foreground: 350 8% 48%;
 
-    --accent: 340 50% 88%;
-    --accent-foreground: 340 30% 20%;
+    --accent: 15 35% 90%;
+    --accent-foreground: 350 20% 22%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 340 25% 90%;
-    --input: 340 25% 90%;
-    --ring: 340 45% 65%;
+    --border: 20 20% 90%;
+    --input: 20 20% 90%;
+    --ring: 350 35% 62%;
 
     --radius: 1rem;
 
-    --glass-bg: 340 40% 98% / 0.6;
-    --glass-border: 340 30% 90% / 0.4;
-    --glass-shadow: 0 8px 32px hsla(340, 30%, 50%, 0.08);
+    --glass-bg: 20 30% 98% / 0.65;
+    --glass-border: 20 20% 90% / 0.4;
+    --glass-shadow: 0 8px 32px hsla(350, 20%, 50%, 0.06);
 
-    --gradient-hero: linear-gradient(135deg, hsl(340 50% 92%), hsl(20 40% 94%), hsl(340 40% 96%));
-    --gradient-primary: linear-gradient(135deg, hsl(340, 45%, 65%), hsl(350, 50%, 72%));
-    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsla(340, 50%, 75%, 0.25) 0%, transparent 60%);
+    --gradient-hero: linear-gradient(135deg, hsl(15 30% 94%), hsl(30 25% 95%), hsl(350 20% 96%));
+    --gradient-primary: linear-gradient(135deg, hsl(350, 32%, 60%), hsl(10, 35%, 68%));
+    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsla(350, 35%, 70%, 0.2) 0%, transparent 60%);
 
     --font-heading: 'Playfair Display', serif;
     --font-body: 'DM Sans', sans-serif;
@@ -58,41 +58,41 @@
   }
 
   .dark {
-    --background: 340 20% 10%;
-    --foreground: 340 15% 90%;
+    --background: 350 18% 11%;
+    --foreground: 20 15% 90%;
 
-    --card: 340 18% 14%;
-    --card-foreground: 340 15% 90%;
+    --card: 350 15% 15%;
+    --card-foreground: 20 15% 90%;
 
-    --popover: 340 18% 14%;
-    --popover-foreground: 340 15% 90%;
+    --popover: 350 15% 15%;
+    --popover-foreground: 20 15% 90%;
 
-    --primary: 340 40% 60%;
+    --primary: 350 32% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 340 15% 18%;
-    --secondary-foreground: 340 15% 85%;
+    --secondary: 350 12% 19%;
+    --secondary-foreground: 20 12% 82%;
 
-    --muted: 340 12% 20%;
-    --muted-foreground: 340 10% 60%;
+    --muted: 350 10% 21%;
+    --muted-foreground: 20 8% 58%;
 
-    --accent: 340 25% 22%;
-    --accent-foreground: 340 20% 85%;
+    --accent: 350 18% 23%;
+    --accent-foreground: 20 15% 85%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 340 15% 20%;
-    --input: 340 15% 20%;
-    --ring: 340 40% 60%;
+    --border: 350 12% 22%;
+    --input: 350 12% 22%;
+    --ring: 350 32% 58%;
 
-    --glass-bg: 340 18% 14% / 0.7;
-    --glass-border: 340 15% 25% / 0.4;
-    --glass-shadow: 0 8px 32px hsla(340, 20%, 5%, 0.3);
+    --glass-bg: 350 15% 15% / 0.7;
+    --glass-border: 350 12% 26% / 0.4;
+    --glass-shadow: 0 8px 32px hsla(350, 18%, 5%, 0.3);
 
-    --gradient-hero: linear-gradient(135deg, hsl(340 20% 12%), hsl(350 18% 14%), hsl(340 22% 10%));
-    --gradient-primary: linear-gradient(135deg, hsl(340, 40%, 55%), hsl(350, 45%, 62%));
-    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsla(340, 40%, 50%, 0.15) 0%, transparent 60%);
+    --gradient-hero: linear-gradient(135deg, hsl(350 18% 13%), hsl(10 14% 15%), hsl(350 20% 11%));
+    --gradient-primary: linear-gradient(135deg, hsl(350, 32%, 52%), hsl(10, 35%, 60%));
+    --gradient-glow: radial-gradient(ellipse at 50% 0%, hsla(350, 30%, 48%, 0.12) 0%, transparent 60%);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;

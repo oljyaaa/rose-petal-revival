@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Heart, Instagram, Phone, MapPin, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   const ref = useRef(null);
@@ -24,14 +25,14 @@ export default function Footer() {
         transition={{ duration: 0.6 }}
         className="container mx-auto px-4 py-16"
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
             <h3 className="font-heading text-2xl font-bold text-foreground mb-4">
               Beauty <span className="text-gradient">&</span> Room
             </h3>
             <p className="font-body text-muted-foreground text-sm leading-relaxed mb-6">
-              Професійний салон краси у місті Бердичів. Косметологія, масаж та елос-епіляція.
+              Професійний косметологічний салон у місті Бердичів. Косметологія, масаж та елос-епіляція.
             </p>
             <div className="flex gap-3">
               <a
@@ -46,6 +47,17 @@ export default function Footer() {
                 <Phone size={18} />
               </a>
             </div>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <h4 className="font-heading text-lg font-semibold text-foreground mb-4">Навігація</h4>
+            <ul className="space-y-2.5 font-body text-sm">
+              <li><Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">Головна</Link></li>
+              <li><Link to="/masters" className="text-muted-foreground hover:text-foreground transition-colors">Наші майстри</Link></li>
+              <li><Link to="/prices" className="text-muted-foreground hover:text-foreground transition-colors">Ціни та послуги</Link></li>
+              <li><Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">Про нас</Link></li>
+            </ul>
           </div>
 
           {/* Contacts */}
@@ -80,7 +92,7 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Ваш email"
-                className="flex-1 px-4 py-2.5 rounded-xl bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body text-sm"
+                className="flex-1 min-w-0 px-4 py-2.5 rounded-xl bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body text-sm"
               />
               <button
                 type="submit"

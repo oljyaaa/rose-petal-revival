@@ -11,10 +11,7 @@ export default function HeroSection({ onBooking }: { onBooking: () => void }) {
   return (
     <section ref={ref} id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden gradient-hero">
       {/* Parallax BG Image */}
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 z-0"
-      >
+      <motion.div style={{ y }} className="absolute inset-0 z-0">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
@@ -45,7 +42,7 @@ export default function HeroSection({ onBooking }: { onBooking: () => void }) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold text-foreground mb-6 leading-tight"
+          className="font-heading text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-foreground mb-6 leading-tight"
         >
           Beauty <span className="text-gradient">&</span> Room
         </motion.h1>
@@ -54,16 +51,16 @@ export default function HeroSection({ onBooking }: { onBooking: () => void }) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="font-body text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
+          className="font-body text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 px-2"
         >
-          Відкрийте для себе світ краси та гармонії. Професійні процедури для вашого обличчя та тіла у затишній атмосфері.
+          Професійна косметологія у Бердичеві. Ін'єкційні та безін'єкційні процедури для обличчя, масаж та елос-епіляція.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center px-4"
         >
           <button
             onClick={onBooking}
