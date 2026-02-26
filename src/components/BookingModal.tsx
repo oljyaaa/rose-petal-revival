@@ -17,20 +17,23 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
   return (
     <AnimatePresence>
       {open && (
-        <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          {/* Темний розмитий фон */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-foreground/30 backdrop-blur-sm z-50"
+            className="absolute inset-0 bg-foreground/30 backdrop-blur-sm"
           />
+          
+          {/* Сама форма */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-md z-50 glass rounded-2xl p-8 overflow-y-auto max-h-[90vh]"
+            className="relative w-full max-w-md glass rounded-2xl p-8 overflow-y-auto max-h-[90vh] z-10 shadow-xl"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="font-heading text-2xl font-bold text-foreground">Записатись</h3>
@@ -53,6 +56,7 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* ... (решта твого коду з інпутами залишається без змін) ... */}
                 <div>
                   <label className="block font-body text-sm font-medium text-foreground mb-1.5">Ім'я</label>
                   <input
@@ -101,7 +105,7 @@ export default function BookingModal({ open, onClose }: { open: boolean; onClose
               </form>
             )}
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );

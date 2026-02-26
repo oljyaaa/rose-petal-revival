@@ -149,18 +149,29 @@ const About = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="glass rounded-2xl p-6 hover-lift">
                 <MapPin className="w-6 h-6 text-primary mx-auto mb-3" />
-                <p className="font-body text-sm text-foreground font-medium">м. Бердичів</p>
-                <p className="font-body text-xs text-muted-foreground mt-1">Житомирська область</p>
+                <a 
+  href="https://maps.google.com/?q=м.+Бердичів,+вул.+Європейська,+71" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="group block cursor-pointer"
+>
+  <p className="font-body text-sm text-foreground font-medium group-hover:text-primary transition-colors">
+    м. Бердичів
+  </p>
+  <p className="font-body text-xs text-muted-foreground mt-1 group-hover:text-primary/70 transition-colors">
+    Житомирська область
+  </p>
+</a>
               </div>
               <div className="glass rounded-2xl p-6 hover-lift">
                 <Phone className="w-6 h-6 text-primary mx-auto mb-3" />
-                <p className="font-body text-sm text-foreground font-medium">+38 (0XX) XXX-XX-XX</p>
-                <p className="font-body text-xs text-muted-foreground mt-1">Щодня 9:00 – 20:00</p>
+                <p className="font-body text-sm text-foreground font-medium">+38 (098) 641-14-12</p>
+                <p className="font-body text-xs text-muted-foreground mt-1">Щодня 9:00 – 18:00</p>
               </div>
               <div className="glass rounded-2xl p-6 hover-lift">
                 <Clock className="w-6 h-6 text-primary mx-auto mb-3" />
                 <p className="font-body text-sm text-foreground font-medium">Пн – Сб</p>
-                <p className="font-body text-xs text-muted-foreground mt-1">9:00 – 20:00</p>
+                <p className="font-body text-xs text-muted-foreground mt-1">9:00 – 18:00</p>
               </div>
             </div>
           </div>
