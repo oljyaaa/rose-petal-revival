@@ -1,62 +1,173 @@
-import { useState, useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { Check, Sparkles, Heart, Zap } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { ChevronDown, Plus, Sparkles, Zap, Layers } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
+import { useCart } from "@/context/CartContext";
+import { useToast } from "@/hooks/use-toast";
 
-const categories = [
+// ─── TYPES ────────────────────────────────────────────────────────────────────
+
+interface Service {
+  id: number;
+  name: string;
+  price: string;
+  priceNumeric: number;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  services: Service[];
+}
+
+// ─── TAB CONFIG ───────────────────────────────────────────────────────────────
+
+const TAB_CONFIG = [
   {
-    name: "Ін'єкційна косметологія",
+    label: "ІН'ЄКЦІЙНІ ПРОЦЕДУРИ",
     icon: Sparkles,
-    items: [
-      { service: "Мезотерапія обличчя", price: "від 1 200 ₴" },
-      { service: "Біоревіталізація", price: "від 2 500 ₴" },
-      { service: "Ботулінотерапія", price: "від 2 000 ₴" },
-      { service: "Контурна пластика", price: "від 3 500 ₴" },
-      { service: "Плазмоліфтинг", price: "від 1 800 ₴" },
-    ],
+    categoryIds: [12, 13, 14, 15, 16, 17, 19],
+    featured: false,
   },
   {
-    name: "Безін'єкційний догляд",
-    icon: Heart,
-    items: [
-      { service: "Чистка обличчя (комбінована)", price: "від 800 ₴" },
-      { service: "Хімічний пілінг", price: "від 600 ₴" },
-      { service: "Мікродермабразія", price: "від 900 ₴" },
-      { service: "Альгінатна маска", price: "від 400 ₴" },
-      { service: "LED-терапія", price: "від 500 ₴" },
-    ],
-  },
-  {
-    name: "Масаж",
-    icon: Heart,
-    featured: true,
-    items: [
-      { service: "Класичний масаж (спина)", price: "від 500 ₴" },
-      { service: "Масаж усього тіла", price: "від 900 ₴" },
-      { service: "Антицелюлітний масаж", price: "від 700 ₴" },
-      { service: "Лімфодренажний масаж", price: "від 800 ₴" },
-      { service: "Масаж обличчя та шиї", price: "від 400 ₴" },
-    ],
-  },
-  {
-    name: "Елос-епіляція",
+    label: "ЛАЗЕР / SMAS",
     icon: Zap,
-    items: [
-      { service: "Зона бікіні", price: "від 500 ₴" },
-      { service: "Ноги повністю", price: "від 1 500 ₴" },
-      { service: "Руки повністю", price: "від 600 ₴" },
-      { service: "Обличчя", price: "від 300 ₴" },
-      { service: "Зона пахв", price: "від 250 ₴" },
-    ],
+    categoryIds: [8, 9, 10, 11, 23, 24],
+    featured: true, // gradient card
+  },
+  {
+    label: "RF / ПІГМЕНТАЦІЯ / ІНШЕ",
+    icon: Layers,
+    categoryIds: [1, 2, 3, 4, 5, 6, 7, 18, 20, 21, 22, 25, 26, 27, 28, 29],
+    featured: false,
   },
 ];
 
-function CategoryCard({ category, index }: { category: typeof categories[0]; index: number }) {
+const API_URL = "https://thebeauty-room.com/priceapi.php";
+
+// ─── ACCORDION ROW ────────────────────────────────────────────────────────────
+
+const CategoryAccordion = ({
+  category,
+  featured,
+}: {
+  category: Category;
+  featured: boolean;
+}) => {
+  const [open, setOpen] = useState(false);
+  const { addItem, toggleCart } = useCart();
+  const { toast } = useToast();
+
+  const handleAdd = (svc: Service, e: React.MouseEvent) => {
+    e.stopPropagation();
+    addItem({
+      serviceId: svc.id,
+      cat: category.name,
+      name: svc.name,
+      price: svc.priceNumeric,
+      priceLabel: svc.price,
+    });
+    toast({ title: "Додано до кошика", description: svc.name });
+    toggleCart();
+  };
+
+  return (
+    <div className={`border-b last:border-b-0 ${featured ? "border-primary-foreground/20" : "border-border"}`}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between py-3 text-left group"
+      >
+        <span className={`font-body text-sm font-medium transition-colors leading-snug pr-3 ${
+          featured
+            ? "text-primary-foreground group-hover:text-primary-foreground/80"
+            : "text-foreground group-hover:text-primary"
+        }`}>
+          {category.name}
+        </span>
+        <ChevronDown
+          className={`w-4 h-4 shrink-0 transition-transform duration-300 ${
+            open ? "rotate-180" : ""
+          } ${featured ? "text-primary-foreground/60" : "text-muted-foreground"}`}
+        />
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="body"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className={`mb-3 rounded-xl overflow-hidden divide-y ${
+              featured
+                ? "bg-primary-foreground/10 divide-primary-foreground/10"
+                : "bg-secondary/40 divide-border/50"
+            }`}>
+              {category.services.map((svc) => (
+                <div
+                  key={svc.id}
+                  className={`flex items-center justify-between gap-2 py-2.5 px-3 transition-colors ${
+                    featured ? "hover:bg-primary-foreground/10" : "hover:bg-secondary/70"
+                  }`}
+                >
+                  <span className={`font-body text-xs leading-snug flex-1 min-w-0 ${
+                    featured ? "text-primary-foreground/90" : "text-muted-foreground"
+                  }`}>
+                    {svc.name}
+                  </span>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className={`font-body text-xs font-semibold whitespace-nowrap ${
+                      featured ? "text-primary-foreground" : "text-primary"
+                    }`}>
+                      {svc.price}
+                    </span>
+                    <button
+                      onClick={(e) => handleAdd(svc, e)}
+                      title="Додати до кошика"
+                      className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 shrink-0 ${
+                        featured
+                          ? "bg-primary-foreground/20 hover:bg-primary-foreground/40 text-primary-foreground"
+                          : "bg-primary/15 hover:bg-primary hover:text-primary-foreground text-primary"
+                      }`}
+                    >
+                      <Plus size={13} strokeWidth={2.5} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+// ─── TAB CARD ─────────────────────────────────────────────────────────────────
+
+const TabCard = ({
+  tab,
+  index,
+  categories,
+  loading,
+}: {
+  tab: typeof TAB_CONFIG[0];
+  index: number;
+  categories: Category[];
+  loading: boolean;
+}) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const Icon = category.icon;
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const Icon = tab.icon;
+
+  const tabCategories = categories.filter((cat) =>
+    tab.categoryIds.includes(cat.id)
+  );
 
   return (
     <motion.div
@@ -65,43 +176,92 @@ function CategoryCard({ category, index }: { category: typeof categories[0]; ind
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.12 }}
       className={`rounded-2xl p-6 md:p-8 transition-all duration-300 hover-glow ${
-        category.featured
+        tab.featured
           ? "gradient-primary text-primary-foreground shadow-lg"
           : "glass"
       }`}
     >
+      {/* Card header */}
       <div className="flex items-center gap-3 mb-6">
-        <div className={`p-2.5 rounded-xl ${category.featured ? "bg-primary-foreground/20" : "bg-primary/10"}`}>
-          <Icon className={`w-5 h-5 ${category.featured ? "text-primary-foreground" : "text-primary"}`} />
+        <div className={`p-2.5 rounded-xl ${tab.featured ? "bg-primary-foreground/20" : "bg-primary/10"}`}>
+          <Icon className={`w-5 h-5 ${tab.featured ? "text-primary-foreground" : "text-primary"}`} />
         </div>
-        <h3 className={`font-heading text-xl md:text-2xl font-bold ${category.featured ? "" : "text-foreground"}`}>
-          {category.name}
+        <h3 className={`font-heading text-lg md:text-xl font-bold leading-tight ${
+          tab.featured ? "text-primary-foreground" : "text-foreground"
+        }`}>
+          {tab.label}
         </h3>
       </div>
 
-      <ul className="space-y-3.5">
-        {category.items.map((item) => (
-          <li key={item.service} className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0">
-              <Check className={`w-4 h-4 flex-shrink-0 ${category.featured ? "text-primary-foreground/80" : "text-primary"}`} />
-              <span className={`font-body text-sm ${category.featured ? "" : "text-foreground"}`}>
-                {item.service}
-              </span>
-            </div>
-            <span className={`font-body text-sm font-semibold whitespace-nowrap ${category.featured ? "text-primary-foreground/90" : "text-primary"}`}>
-              {item.price}
-            </span>
-          </li>
-        ))}
-      </ul>
+      {/* Loading */}
+      {loading && (
+        <div className={`text-xs text-center py-8 animate-pulse ${
+          tab.featured ? "text-primary-foreground/60" : "text-muted-foreground"
+        }`}>
+          Завантаження...
+        </div>
+      )}
+
+      {/* Categories accordion */}
+      {!loading && tabCategories.length > 0 && (
+        <div>
+          {tabCategories.map((cat) => (
+            <CategoryAccordion
+              key={cat.id}
+              category={cat}
+              featured={tab.featured}
+            />
+          ))}
+        </div>
+      )}
+
+      {!loading && tabCategories.length === 0 && (
+        <div className={`text-xs text-center py-8 ${
+          tab.featured ? "text-primary-foreground/60" : "text-muted-foreground"
+        }`}>
+          Немає послуг
+        </div>
+      )}
     </motion.div>
   );
-}
+};
+
+// ─── PAGE ─────────────────────────────────────────────────────────────────────
 
 const PricesAndServices = () => {
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [allCategories, setAllCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const headingRef = useRef(null);
   const isInView = useInView(headingRef, { once: true, margin: "-80px" });
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data: Array<{ id: number; name: string; services: Array<{ id: number; name: string; price: string }> }>) => {
+        setAllCategories(
+          data.map((cat) => ({
+            id: cat.id,
+            name: cat.name,
+            services: cat.services.map((svc) => {
+              const match = svc.price.replace(/\s/g, "").match(/^(\d+)/);
+              return {
+                id: svc.id,
+                name: svc.name,
+                price: svc.price,
+                priceNumeric: match ? parseInt(match[1], 10) : 0,
+              };
+            }),
+          }))
+        );
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   return (
     <main className="min-h-screen bg-background">
@@ -116,21 +276,31 @@ const PricesAndServices = () => {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <span className="font-body text-sm font-medium text-primary uppercase tracking-widest">Прозорі ціни</span>
-            <h1 className="font-heading text-4xl md:text-6xl font-bold text-foreground mt-3 mb-4">Ціни та послуги</h1>
+            <span className="font-body text-sm font-medium text-primary uppercase tracking-widest">
+              Прозорі ціни
+            </span>
+            <h1 className="font-heading text-4xl md:text-6xl font-bold text-foreground mt-3 mb-4">
+              Ціни та послуги
+            </h1>
             <p className="font-body text-lg text-muted-foreground max-w-2xl mx-auto">
-              Повний перелік наших процедур з актуальними цінами. Консультація — безкоштовно.
+              Натисніть <span className="text-primary font-semibold">+</span> біля послуги, щоб додати до кошика та записатись. Консультація — безкоштовно.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Pricing Grid */}
+      {/* Pricing Grid — 3 картки як раніше */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {categories.map((cat, i) => (
-              <CategoryCard key={cat.name} category={cat} index={i} />
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            {TAB_CONFIG.map((tab, i) => (
+              <TabCard
+                key={tab.label}
+                tab={tab}
+                index={i}
+                categories={allCategories}
+                loading={loading}
+              />
             ))}
           </div>
 

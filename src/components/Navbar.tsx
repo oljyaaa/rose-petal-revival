@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Moon, Sun, Menu, X, ShoppingBag } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
 
 const navLinks = [
   { label: "Головна", href: "/" },
@@ -14,6 +15,8 @@ export default function Navbar({ onBooking }: { onBooking: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { toggleCart, totalCount } = useCart();
+
   const [dark, setDark] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("theme") === "dark";
@@ -68,6 +71,7 @@ export default function Navbar({ onBooking }: { onBooking: () => void }) {
               />
             </Link>
           ))}
+
           <button
             onClick={() => setDark(!dark)}
             className="p-2 rounded-full bg-secondary text-secondary-foreground hover:bg-accent transition-colors"
@@ -84,6 +88,21 @@ export default function Navbar({ onBooking }: { onBooking: () => void }) {
               )}
             </AnimatePresence>
           </button>
+
+          {/* Cart button */}
+          <button
+            onClick={toggleCart}
+            className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:bg-accent transition-colors"
+            aria-label="Кошик"
+          >
+            <ShoppingBag size={18} />
+            {totalCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none">
+                {totalCount}
+              </span>
+            )}
+          </button>
+
           <button
             onClick={onBooking}
             className="gradient-primary text-primary-foreground px-6 py-2.5 rounded-2xl font-medium text-sm hover:opacity-90 transition-opacity"
@@ -92,11 +111,26 @@ export default function Navbar({ onBooking }: { onBooking: () => void }) {
           </button>
         </div>
 
-        {/* Mobile */}
-        <div className="flex lg:hidden items-center gap-3">
+        {/* Mobile right side */}
+        <div className="flex lg:hidden items-center gap-2">
           <button onClick={() => setDark(!dark)} className="p-2 rounded-full bg-secondary text-secondary-foreground">
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
+
+          {/* Cart mobile */}
+          <button
+            onClick={toggleCart}
+            className="relative p-2 text-foreground"
+            aria-label="Кошик"
+          >
+            <ShoppingBag size={22} />
+            {totalCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center leading-none">
+                {totalCount}
+              </span>
+            )}
+          </button>
+
           <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-foreground">
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

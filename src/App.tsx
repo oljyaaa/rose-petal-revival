@@ -8,24 +8,29 @@ import Masters from "./pages/Masters";
 import PricesAndServices from "./pages/PricesAndServices";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import { CartProvider } from "@/context/CartContext";
+import CartDrawer from "@/components/CartDrawer";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/masters" element={<Masters />} />
-          <Route path="/prices" element={<PricesAndServices />} />
-          <Route path="/about" element={<About />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <CartProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          {/* CartDrawer всередині BrowserRouter — використовує useNavigate */}
+          <CartDrawer />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/masters" element={<Masters />} />
+            <Route path="/prices" element={<PricesAndServices />} />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
