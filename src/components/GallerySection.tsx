@@ -2,9 +2,9 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 
 const galleryItems = [
-  { before: "/images/service-skincare.jpg", after: "/images/service-relax.jpg", label: "Догляд за шкірою" },
-  { before: "/images/service-epilation.jpg", after: "/images/service-nails.jpg", label: "Косметологія" },
-  { before: "/images/service-relax.jpg", after: "/images/hero-bg.jpg", label: "Атмосфера" },
+  { before: "/images/Face1.jpg", after: "/images/face2.jpg", label: "Догляд за шкірою" },
+  { before: "/images/lips1.jpg", after: "/images/lips2.jpg", label: "Губи" },
+  { before: "/images/cleanFace1.jpg", after: "/images/Clean2.jpg", label: "Обличчя" },
 ];
 
 function BeforeAfterCard({ item, index }: { item: typeof galleryItems[0]; index: number }) {
