@@ -65,12 +65,16 @@ const About = () => {
               transition={{ duration: 0.6 }}
             >
               <div className="aspect-[4/5] rounded-2xl overflow-hidden">
-                <img
-                  src="/images/hero-bg.jpg"
-                  alt="Інтер'єр салону Beauty & Room"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <video
+                src="../images/BeautySalonVideo.mp4" 
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              >
+              </video>
+            </div>
             </motion.div>
 
             <motion.div

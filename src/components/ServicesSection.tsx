@@ -7,22 +7,22 @@ const services = [
   {
     title: "Ін'єкційна косметологія",
     description: "Мезотерапія, біоревіталізація, ботулінотерапія та контурна пластика для молодості вашої шкіри",
-    image: "/images/service-skincare.jpg",
+    image: "/images/lips.jpg",
   },
   {
     title: "Безін'єкційний догляд",
     description: "Чистки, пілінги, маски та апаратні методики для здорової та сяючої шкіри обличчя",
-    image: "/images/service-relax.jpg",
+    image: "/images/cleanFace1.jpg",
   },
   {
     title: "Елос-епіляція",
     description: "Сучасна технологія видалення волосся — безболісно, ефективно та надовго",
-    image: "/images/service-epilation.jpg",
+    image: "/images/elos-epil.jpg",
   },
   {
     title: "Масаж",
     description: "Класичний, лімфодренажний та антицелюлітний масаж для здоров'я та краси вашого тіла",
-    image: "/images/service-nails.jpg",
+    image: "/images/massage.jpg",
   },
 ];
 
