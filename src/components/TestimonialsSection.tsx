@@ -9,6 +9,7 @@ interface Testimonial {
   name: string;
   service: string;
   description: string;
+  rating: number;
   created_at: string;
 }
 
@@ -54,8 +55,7 @@ const AddReviewModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // rating не відправляємо — лише візуальний
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, rating }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Помилка");
@@ -70,14 +70,11 @@ const AddReviewModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess
 
   return (
     <>
-      {/* Overlay */}
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         className="fixed inset-0 bg-foreground/40 backdrop-blur-sm z-50"
         onClick={onClose}
       />
-
-      {/* Modal */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -86,7 +83,6 @@ const AddReviewModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess
         className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
       >
         <div className="glass rounded-2xl p-8 w-full max-w-md shadow-2xl pointer-events-auto relative">
-          {/* Close */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary transition-colors text-foreground"
@@ -97,7 +93,6 @@ const AddReviewModal = ({ onClose, onSuccess }: { onClose: () => void; onSuccess
           <h3 className="font-heading text-2xl font-bold text-foreground mb-6">Залишити відгук</h3>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Зірки */}
             <div>
               <label className="block font-body text-xs font-medium text-foreground mb-2">
                 Ваша оцінка
@@ -176,7 +171,7 @@ export default function TestimonialsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  useEffect(() => {
+  const loadTestimonials = () => {
     fetch(API_URL)
       .then(res => res.json())
       .then((data: Testimonial[]) => {
@@ -184,20 +179,20 @@ export default function TestimonialsSection() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadTestimonials();
   }, []);
 
   const prev = () => setCurrent(c => (c === 0 ? testimonials.length - 1 : c - 1));
   const next = () => setCurrent(c => (c === testimonials.length - 1 ? 0 : c + 1));
 
   const handleSuccess = () => {
-  setSuccessMsg(true);
-  setTimeout(() => setSuccessMsg(false), 4000);
-  // Перезавантажуємо коментарі з БД
-  fetch(API_URL)
-    .then(res => res.json())
-    .then((data: Testimonial[]) => setTestimonials(data))
-    .catch(() => {});
-};
+    setSuccessMsg(true);
+    setTimeout(() => setSuccessMsg(false), 4000);
+    loadTestimonials();
+  };
 
   return (
     <section id="testimonials" className="py-24 bg-background">
@@ -213,7 +208,6 @@ export default function TestimonialsSection() {
           <h2 className="font-heading text-4xl md:text-5xl font-bold text-foreground mt-3">Що кажуть клієнти</h2>
         </motion.div>
 
-        {/* Success toast */}
         <AnimatePresence>
           {successMsg && (
             <motion.div
@@ -221,7 +215,7 @@ export default function TestimonialsSection() {
               className="max-w-md mx-auto mb-6 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20 text-center"
             >
               <p className="font-body text-sm text-primary font-medium">
-                ✓ Дякуємо! Відгук з'явиться після модерації.
+                ✓ Дякуємо! Відгук додано.
               </p>
             </motion.div>
           )}
@@ -242,10 +236,18 @@ export default function TestimonialsSection() {
 
           {!loading && testimonials.length > 0 && (
             <div className="glass rounded-2xl p-8 md:p-12 text-center relative">
-              {/* Завжди 5 зірок у карусель */}
+
+              {/* Зірки з реального рейтингу */}
               <div className="flex justify-center gap-1 mb-6">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-primary text-primary" />
+                  <Star
+                    key={i}
+                    className={`w-5 h-5 ${
+                      i < (testimonials[current].rating ?? 5)
+                        ? "fill-primary text-primary"
+                        : "fill-transparent text-muted-foreground/30"
+                    }`}
+                  />
                 ))}
               </div>
 
@@ -298,7 +300,6 @@ export default function TestimonialsSection() {
             </div>
           )}
 
-          {/* Кнопка залишити відгук */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
