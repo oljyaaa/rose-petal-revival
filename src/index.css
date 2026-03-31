@@ -112,11 +112,15 @@
 
   html {
     scroll-behavior: smooth;
+    /* Smooth scroll for all anchor links */
+    scroll-padding-top: 80px;
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
+    /* Prevent horizontal scroll on animation overflow */
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -168,4 +172,93 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Tabular nums for counting animations */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
+
+/* ── Keyframe animations ─────────────────────────────────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-14px) rotate(1deg); }
+  66%       { transform: translateY(-7px) rotate(-1deg); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+  50%       { transform: translateY(-18px) rotate(-2deg) scale(1.03); }
+}
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-9px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0px hsla(350, 35%, 62%, 0); }
+  50%       { box-shadow: 0 0 24px hsla(350, 35%, 62%, 0.35); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Utility animation classes */
+.animate-float       { animation: float       7s ease-in-out infinite; }
+.animate-float-slow  { animation: float-slow 10s ease-in-out infinite; }
+.animate-float-gentle{ animation: float-gentle 6s ease-in-out infinite; }
+.animate-pulse-glow  { animation: pulse-glow  3s ease-in-out infinite; }
+.animate-spin-slow   { animation: spin-slow  20s linear infinite; }
+
+/* Shimmer skeleton placeholder */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--secondary)) 25%,
+    hsl(var(--accent)) 50%,
+    hsl(var(--secondary)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Scroll progress bar ─────────────────────────────────────────────── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transform-origin: left;
+  z-index: 9998;
+  pointer-events: none;
+  box-shadow: 0 0 8px hsla(350, 35%, 62%, 0.6);
+}
+
+/* ── Section transition helpers ──────────────────────────────────────── */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.section-reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Improved focus ring for accessibility */
+*:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 3px;
+  border-radius: 6px;
 }

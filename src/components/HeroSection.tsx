@@ -2,6 +2,145 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Sparkles } from "lucide-react";
 
+// ── Анімований фон героя (без фото) ───────────────────────────────────────────
+const BOKEH = [
+  { w: 420, h: 420, top: "-8%",  left: "-5%",  color: "hsl(350 60% 78% / 0.22)",  dur: 22, dx: 40, dy: 28 },
+  { w: 560, h: 560, top: "30%",  left: "60%",  color: "hsl(15 55% 80% / 0.18)",   dur: 28, dx: -35, dy: 30 },
+  { w: 320, h: 320, top: "55%",  left: "5%",   color: "hsl(340 50% 82% / 0.16)",  dur: 18, dx: 25, dy: -20 },
+  { w: 260, h: 260, top: "10%",  left: "70%",  color: "hsl(30 60% 85% / 0.20)",   dur: 24, dx: -20, dy: 18 },
+  { w: 180, h: 180, top: "70%",  left: "45%",  color: "hsl(350 45% 75% / 0.14)",  dur: 16, dx: 18, dy: -25 },
+];
+
+// Пелюстки для фону
+const HERO_PETALS = [
+  { x: "12%",  y: "18%",  size: 28, rotate: 20,  dur: 14, delay: 0    },
+  { x: "82%",  y: "12%",  size: 20, rotate: -35, dur: 18, delay: 2    },
+  { x: "65%",  y: "70%",  size: 24, rotate: 130, dur: 12, delay: 1    },
+  { x: "28%",  y: "75%",  size: 18, rotate: -70, dur: 20, delay: 3    },
+  { x: "90%",  y: "50%",  size: 22, rotate: 60,  dur: 16, delay: 1.5  },
+  { x: "5%",   y: "55%",  size: 16, rotate: 200, dur: 22, delay: 0.5  },
+  { x: "50%",  y: "5%",   size: 20, rotate: -10, dur: 15, delay: 2.5  },
+  { x: "40%",  y: "85%",  size: 14, rotate: 155, dur: 19, delay: 4    },
+];
+
+function HeroBg({ parallaxY, parallaxScale }: { parallaxY: ReturnType<typeof useTransform>; parallaxScale: ReturnType<typeof useTransform> }) {
+  return (
+    <motion.div
+      style={{ y: parallaxY, scale: parallaxScale }}
+      className="absolute inset-0 z-0 overflow-hidden"
+    >
+      {/* Base gradient — ivory-rose-peach */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 110% 80% at 30% 20%, hsl(15 60% 94%) 0%, hsl(350 40% 92%) 40%, hsl(30 50% 96%) 70%, hsl(0 0% 98%) 100%)",
+        }}
+      />
+
+      {/* Subtle dot-mesh pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.035]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, hsl(350 35% 40%) 1px, transparent 1px)",
+          backgroundSize: "36px 36px",
+        }}
+      />
+
+      {/* Animated bokeh orbs */}
+      {BOKEH.map((b, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full blur-3xl pointer-events-none"
+          style={{
+            width: b.w,
+            height: b.h,
+            top: b.top,
+            left: b.left,
+            background: b.color,
+          }}
+          animate={{
+            x: [0, b.dx, 0],
+            y: [0, b.dy, 0],
+          }}
+          transition={{
+            duration: b.dur,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 1.8,
+          }}
+        />
+      ))}
+
+      {/* Floating petal silhouettes */}
+      {HERO_PETALS.map((p, i) => (
+        <motion.div
+          key={i}
+          className="absolute pointer-events-none"
+          style={{
+            left: p.x,
+            top: p.y,
+            width: p.size,
+            height: p.size * 1.55,
+          }}
+          animate={{
+            y: [-12, 12, -12],
+            rotate: [p.rotate - 6, p.rotate + 6, p.rotate - 6],
+            opacity: [0.12, 0.28, 0.12],
+          }}
+          transition={{
+            duration: p.dur,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          {/* Petal shape via clip */}
+          <div
+            className="w-full h-full"
+            style={{
+              background: "hsl(350 55% 70% / 0.6)",
+              borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
+              transform: `rotate(${p.rotate}deg)`,
+            }}
+          />
+        </motion.div>
+      ))}
+
+      {/* Shimmer diagonal line accents */}
+      {[15, 38, 62, 85].map((pos, i) => (
+        <motion.div
+          key={i}
+          className="absolute top-0 bottom-0 pointer-events-none"
+          style={{
+            left: `${pos}%`,
+            width: 1,
+            background:
+              "linear-gradient(to bottom, transparent 0%, hsl(350 40% 65% / 0.12) 40%, hsl(15 45% 70% / 0.08) 60%, transparent 100%)",
+          }}
+          animate={{ opacity: [0.4, 1, 0.4], scaleY: [0.95, 1.05, 0.95] }}
+          transition={{
+            duration: 8 + i * 2,
+            delay: i * 1.2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Glossy top highlight */}
+      <div
+        className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, hsl(0 0% 100% / 0.45) 0%, transparent 100%)",
+        }}
+      />
+    </motion.div>
+  );
+}
+
 // ── Конфіг частинок ───────────────────────────────────────────────────────────
 const PARTICLES = [
   { x: "8%",  y: "6%",  size: 3, dur: 7,  delay: 0   },
@@ -254,20 +393,19 @@ export default function HeroSection({ onBooking }: { onBooking: () => void }) {
       <section
         ref={heroRef}
         id="hero"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden gradient-hero"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
       >
-        <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/hero-bg.jpg')" }}
-          />
-          <div className="absolute inset-0 bg-background/60" />
-        </motion.div>
+        {/* Animated cosmetics background */}
+        <HeroBg parallaxY={y} parallaxScale={scale} />
 
-        <div className="absolute inset-0 gradient-glow z-[1]" />
-        <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-primary/10 blur-3xl animate-float" />
-        <div className="absolute bottom-32 right-16 w-48 h-48 rounded-full bg-accent/20 blur-3xl animate-float-slow" />
-        <div className="absolute top-1/3 right-1/4 w-20 h-20 rounded-full bg-primary/5 blur-2xl animate-float" />
+        {/* Radial glow overlay on top of hero bg */}
+        <div
+          className="absolute inset-0 z-[1] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 50% at 50% 0%, hsl(350 50% 70% / 0.13) 0%, transparent 65%)",
+          }}
+        />
 
         <motion.div style={{ opacity }} className="relative z-10 container mx-auto px-4 text-center">
           <motion.div
