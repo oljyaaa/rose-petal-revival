@@ -262,3 +262,47 @@
   outline-offset: 3px;
   border-radius: 6px;
 }
+
+/* ── Hero section theme-aware backgrounds ────────────────────────────────── */
+
+/* Base radial gradient: light mode — ivory/rose/peach; dark mode — deep rose/muted */
+.hero-base-gradient {
+  background: radial-gradient(
+    ellipse 110% 80% at 30% 20%,
+    hsl(15 60% 94%) 0%,
+    hsl(350 40% 92%) 40%,
+    hsl(30 50% 96%) 70%,
+    hsl(0 0% 98%) 100%
+  );
+}
+.dark .hero-base-gradient {
+  background: radial-gradient(
+    ellipse 110% 80% at 30% 20%,
+    hsl(350 25% 14%) 0%,
+    hsl(10 18% 12%) 40%,
+    hsl(350 20% 10%) 70%,
+    hsl(350 18% 8%) 100%
+  );
+}
+
+/* Top highlight gloss */
+.hero-top-highlight {
+  background: linear-gradient(to bottom, hsl(0 0% 100% / 0.45) 0%, transparent 100%);
+}
+.dark .hero-top-highlight {
+  background: linear-gradient(to bottom, hsl(350 20% 30% / 0.12) 0%, transparent 100%);
+}
+
+/* Bokeh orbs — light */
+.hero-bokeh-1 { background: hsl(350 60% 78% / 0.22); }
+.hero-bokeh-2 { background: hsl(15 55% 80% / 0.18); }
+.hero-bokeh-3 { background: hsl(340 50% 82% / 0.16); }
+.hero-bokeh-4 { background: hsl(30 60% 85% / 0.20); }
+.hero-bokeh-5 { background: hsl(350 45% 75% / 0.14); }
+
+/* Bokeh orbs — dark */
+.dark .hero-bokeh-1 { background: hsl(350 40% 35% / 0.18); }
+.dark .hero-bokeh-2 { background: hsl(15 35% 30% / 0.15); }
+.dark .hero-bokeh-3 { background: hsl(340 35% 32% / 0.13); }
+.dark .hero-bokeh-4 { background: hsl(30 35% 28% / 0.16); }
+.dark .hero-bokeh-5 { background: hsl(350 30% 38% / 0.12); }

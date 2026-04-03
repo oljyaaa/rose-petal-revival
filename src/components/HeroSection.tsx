@@ -3,12 +3,13 @@ import { useRef } from "react";
 import { Sparkles } from "lucide-react";
 
 // ── Анімований фон героя (без фото) ───────────────────────────────────────────
+// Bokeh кольори задаються через CSS-класи для підтримки теми
 const BOKEH = [
-  { w: 420, h: 420, top: "-8%",  left: "-5%",  color: "hsl(350 60% 78% / 0.22)",  dur: 22, dx: 40, dy: 28 },
-  { w: 560, h: 560, top: "30%",  left: "60%",  color: "hsl(15 55% 80% / 0.18)",   dur: 28, dx: -35, dy: 30 },
-  { w: 320, h: 320, top: "55%",  left: "5%",   color: "hsl(340 50% 82% / 0.16)",  dur: 18, dx: 25, dy: -20 },
-  { w: 260, h: 260, top: "10%",  left: "70%",  color: "hsl(30 60% 85% / 0.20)",   dur: 24, dx: -20, dy: 18 },
-  { w: 180, h: 180, top: "70%",  left: "45%",  color: "hsl(350 45% 75% / 0.14)",  dur: 16, dx: 18, dy: -25 },
+  { w: 420, h: 420, top: "-8%",  left: "-5%",  colorVar: "bokeh-1",  dur: 22, dx: 40, dy: 28 },
+  { w: 560, h: 560, top: "30%",  left: "60%",  colorVar: "bokeh-2",  dur: 28, dx: -35, dy: 30 },
+  { w: 320, h: 320, top: "55%",  left: "5%",   colorVar: "bokeh-3",  dur: 18, dx: 25, dy: -20 },
+  { w: 260, h: 260, top: "10%",  left: "70%",  colorVar: "bokeh-4",  dur: 24, dx: -20, dy: 18 },
+  { w: 180, h: 180, top: "70%",  left: "45%",  colorVar: "bokeh-5",  dur: 16, dx: 18, dy: -25 },
 ];
 
 // Пелюстки для фону
@@ -29,14 +30,8 @@ function HeroBg({ parallaxY, parallaxScale }: { parallaxY: ReturnType<typeof use
       style={{ y: parallaxY, scale: parallaxScale }}
       className="absolute inset-0 z-0 overflow-hidden"
     >
-      {/* Base gradient — ivory-rose-peach */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 110% 80% at 30% 20%, hsl(15 60% 94%) 0%, hsl(350 40% 92%) 40%, hsl(30 50% 96%) 70%, hsl(0 0% 98%) 100%)",
-        }}
-      />
+      {/* Base gradient — адаптується до теми через CSS-клас */}
+      <div className="absolute inset-0 hero-base-gradient" />
 
       {/* Subtle dot-mesh pattern */}
       <div
@@ -52,13 +47,12 @@ function HeroBg({ parallaxY, parallaxScale }: { parallaxY: ReturnType<typeof use
       {BOKEH.map((b, i) => (
         <motion.div
           key={i}
-          className="absolute rounded-full blur-3xl pointer-events-none"
+          className={`absolute rounded-full blur-3xl pointer-events-none hero-${b.colorVar}`}
           style={{
             width: b.w,
             height: b.h,
             top: b.top,
             left: b.left,
-            background: b.color,
           }}
           animate={{
             x: [0, b.dx, 0],
@@ -129,14 +123,8 @@ function HeroBg({ parallaxY, parallaxScale }: { parallaxY: ReturnType<typeof use
         />
       ))}
 
-      {/* Glossy top highlight */}
-      <div
-        className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, hsl(0 0% 100% / 0.45) 0%, transparent 100%)",
-        }}
-      />
+      {/* Glossy top highlight — адаптується до теми */}
+      <div className="absolute top-0 left-0 right-0 h-1/3 pointer-events-none hero-top-highlight" />
     </motion.div>
   );
 }
